@@ -1,0 +1,95 @@
+﻿@page "/addin"
+@using Cafe.Data.Models;
+@using Cafe.Data.Services;
+<br />
+<br />
+<h3>View Addins</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Action Available</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Loop through each add-in data -->
+        @foreach (var addinData in AddInService.RetrieveAddInData())
+        {
+            <tr>
+                <!-- Display add-in ID, Name, and Price -->
+                <td>@addinData.Id</td>
+                <td>@addinData.AddIn_Name</td>
+                <td>@addinData.AddIn_Price</td>
+                <td>
+                    <!-- Button to navigate to the EditAddIn page with the specific add-in ID -->
+                    <button type="submit" @onclick="@(()=>EditAddIn(addinData.Id))" class="btn btn-primary">Edit</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@code {
+    // Inject NavigationManager for navigation purposes
+    [Inject]
+    private NavigationManager NManager { get; set; }
+
+    // Inject GlobalState for user role information
+    [Inject]
+    private GlobalState GlobalState { get; set; }
+    // Initialize the page on start
+    protected override void OnInitialized()
+    {
+        try
+        {
+            // Inject sample add-in data to ensure some data exists
+            AddInService.InjectSampleAddInData();
+        }
+        catch (Exception ex)
+        {
+            // Handle any initialization errors
+            Console.WriteLine($"Error Initializing Page: {ex.Message}");
+        }
+
+        base.OnInitialized();
+    }
+
+    // Method to navigate to the EditAddIn page with a specific add-in Id
+    public void EditAddIn(Guid id)
+    {
+        try
+        {
+            // Check if the user is an admin before navigating
+            if (GlobalState.CurrentUser?.Role == Roles.Admin)
+            {
+                // Navigate to the EditAddIn page with the specific add-in ID
+                NManager.NavigateTo($"/editaddin/{id}");
+            }
+            else
+            {
+                // Display an unauthorized message for non-admin users
+                App.Current.MainPage.DisplayAlert("Unauthorized", "You don't have permission to edit add-ins.", "Ok");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any navigation errors
+            Console.WriteLine($"Error Navigating: {ex.Message}");
+        }
+    }
+    public void Back()
+    {
+        try
+        {
+            NManager.NavigateTo("nav");
+
+
+        }
+        catch (Exception ex)
+        {
+            // Handle any navigation errors
+            Console.WriteLine($"Error Navigating: {ex.Message}");
+        }
+    }
+}

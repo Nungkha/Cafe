@@ -1,0 +1,35 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavManager
+@inject GlobalState GlobalState
+@using Cafe.Data.Models;
+
+<div class="page">
+
+    @if (GlobalState.CurrentUser != null)
+    {
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+    }
+
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+
+@code {
+
+    private void LogoutHandler()
+    {
+        GlobalState.CurrentUser = null;
+        NavManager.NavigateTo("/login");
+    }
+}

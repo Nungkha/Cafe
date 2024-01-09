@@ -1,0 +1,69 @@
+﻿@page "/login"
+@using Cafe.Data.Models
+@using Cafe.Data.Services
+@inject NavigationManager NavManager 
+
+<h3>Login</h3>
+
+
+<InputText @bind-Value="email" placeholder="Email" />
+<InputText @bind-Value="password" placeholder="Password" type="password" />
+<button @onclick="Login">Login</button>
+
+@if (!string.IsNullOrEmpty(loginMessage))
+{
+	<div class="login-message">
+		@loginMessage
+	</div>
+}
+
+
+
+@code {
+	private string email;
+	private string password;
+	private string loginMessage;
+
+	[Inject]
+	private GlobalState GlobalState { get; set; }
+
+    // creating LoginService object
+    private LoginService LoginService = new LoginService();
+
+    private void Login()
+    {
+        try
+        {
+            // saving authenticated user in CurrentUser of GlobalState
+            GlobalState.CurrentUser = LoginService.AuthenticateUser(email, password);
+
+
+
+            if (GlobalState.CurrentUser != null)
+            {
+                loginMessage = $"Login successful! Welcome, {GlobalState.CurrentUser.Role}.";
+                // Redirect or perform actions upon successful login
+                try
+                {
+                    NavManager.NavigateTo("/dashboard");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"An error occurred during navigation: {ex.Message}");
+                }
+
+            }
+            else
+            {
+                loginMessage = "Login failed. Incorrect email or password.";
+                // Handle unsuccessful login
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or display the exception details
+            Console.WriteLine($"An error occurred during login: {ex.Message}");
+            loginMessage = "An error occurred during login. Please try again.";
+        }
+    }
+}

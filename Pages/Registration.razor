@@ -1,0 +1,74 @@
+﻿@page "/registration"
+@using Cafe.Data.Models
+
+
+<h3>Registration</h3>
+
+<EditForm Model="@registrationModel" OnInvalidSubmit="Submit">
+	<DataAnnotationsValidator />
+	<div class="form-group">
+		<input @bind-value="registrationModel.FirstName" class="form-control" placeholder="First name" />
+		<ValidationMessage For="@(()=> registrationModel.FirstName)" />
+
+	</div>
+
+	<div class="mt-2 form-group">
+		<input @bind-value="registrationModel.LastName" class="form-control" placeholder="Last name" />
+		<ValidationMessage For="@(()=> registrationModel.LastName)" />
+
+	</div>
+
+	<div class="mt-2 form-group">
+		<label>Gender</label>
+		<div class="d-flex flex-row">
+			<div class="col-4 d-flex justify-content-between">
+				<div class="form-check">
+					<input onchange="@(() => registrationModel.Gender="male")" class="form-check-input" type="radio" name="flexRadioDefault"> <label class="form-check-label" for="flexRadioDefault1">
+						Male
+					</label>
+				</div>
+				<div class="form-check">
+					<input onchange="@(() => registrationModel.Gender="female")" class="form-check-input" type="radio" name="flexRadioDefault"> <label class="form-check-label" for="flexRadioDefault2">
+						Female
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<ValidationMessage For="@(()=> registrationModel.Gender)" />
+
+
+		<div class="form-group">
+		<input type="email" @bind-value="registrationModel.Email" class="form-control" placeholder="Email address" />
+		<ValidationMessage For="@(()=> registrationModel.Email)" />
+
+		</div>
+
+		<div class="mt-2 form-group">
+		<input type="password" @bind-value="registrationModel.Password" class="form-control" placeholder="Password" />
+		<ValidationMessage For="@(()=> registrationModel.Password)" />
+
+		</div>
+
+	<div class="mt-2 text-end">
+		<NavLink class="nav-link" href="/">
+			<span>Already have an account? Login</span>
+		</NavLink>
+	</div>
+
+		<div class="text-center mt-2">
+			<button class="btn btn-primary" type="submit">Register</button>
+		</div>
+﻿
+
+</EditForm>
+
+@code {
+	RegistrationModel registrationModel = new();
+
+	private void Submit()
+	{
+		
+	}
+
+}

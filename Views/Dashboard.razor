@@ -1,0 +1,31 @@
+﻿@page "/dashboard"
+@using Cafe.Data.Models
+@using Cafe.Data.Services
+@inject NavigationManager NavManager
+
+
+<h1>Welcome to Cafe</h1>
+
+
+@if (!string.IsNullOrEmpty(welcomeMessage))
+{
+    <div class="login-message">
+        @welcomeMessage
+    </div>
+}
+
+
+@code {
+
+    [Inject]
+    private GlobalState GlobalState { get; set; }
+
+    private string welcomeMessage;
+    //private string welcomeMessage = $"Have a good day {GlobalState.CurrentUser.Role}";
+
+    public Dashboard()
+    {
+    }
+
+
+}
